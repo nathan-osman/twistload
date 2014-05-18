@@ -10,14 +10,14 @@ find_package(Qt5Widgets)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 set(SRC
-    main.cpp
-    mainwindow.cpp)
+    src/main.cpp
+    src/mainwindow.cpp)
 
 qt5_wrap_cpp(MOC
-    mainwindow.h)
+    src/mainwindow.h)
 
 qt5_wrap_ui(UI
-    mainwindow.ui)
+    ui/mainwindow.ui)
 
 add_executable(twistload WIN32
     ${SRC} ${MOC} ${UI})
