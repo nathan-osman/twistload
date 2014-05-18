@@ -1,13 +1,16 @@
 cmake_minimum_required(VERSION 2.8.9)
 project(twistload)
 
+find_package(Qt5Widgets)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
 set(VERSION_MAJOR 0)
 set(VERSION_MINOR 1)
 set(VERSION_PATCH 0)
 set(VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
 
-find_package(Qt5Widgets)
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
+configure_file(src/config.h.in
+    ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
 set(SRC
     src/main.cpp

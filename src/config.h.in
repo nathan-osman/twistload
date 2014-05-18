@@ -15,21 +15,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+ 
+#ifndef TL_CONFIG_H
+#define TL_CONFIG_H
 
-#include <QApplication>
+#define TWISTLOAD_VERSION "@VERSION@"
 
-#include "config.h"
-#include "mainwindow.h"
+#endif // TL_CONFIG_H
 
-int main(int argc, char * argv[])
-{
-    QApplication a(argc, argv);
-    QApplication::setApplicationName("TwistLoad");
-    QApplication::setOrganizationName("Nathan Osman");
-    QApplication::setApplicationVersion(TWISTLOAD_VERSION);
-
-    MainWindow w;
-    w.show();
-
-    return a.exec();
-}
