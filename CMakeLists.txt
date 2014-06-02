@@ -13,16 +13,19 @@ configure_file(src/config.h.in
     ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
 set(SRC
-    src/aboutdialog.cpp
+    src/dialogs/aboutdialog.cpp
+    src/dialogs/adddownloaddialog.cpp
     src/main.cpp
     src/mainwindow.cpp)
 
 qt5_wrap_cpp(MOC
-    src/aboutdialog.h
+    src/dialogs/aboutdialog.h
+    src/dialogs/adddownloaddialog.h
     src/mainwindow.h)
 
 qt5_wrap_ui(UI
     ui/aboutdialog.ui
+    ui/adddownloaddialog.ui
     ui/mainwindow.ui)
 
 qt5_add_resources(QRC resources.qrc)

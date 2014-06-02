@@ -16,22 +16,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "dialogs/aboutdialog.h"
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
+#ifndef TL_ADDDOWNLOADDIALOG_H
+#define TL_ADDDOWNLOADDIALOG_H
 
-MainWindow::MainWindow(QWidget * parent)
-    : QMainWindow(parent), ui(new Ui::MainWindow)
-{
-    ui->setupUi(this);
+#include <QDialog>
+
+namespace Ui {
+    class AddDownloadDialog;
 }
 
-MainWindow::~MainWindow()
+class AddDownloadDialog : public QDialog
 {
-    delete ui;
-}
+    Q_OBJECT
 
-void MainWindow::showAboutDialog()
-{
-    AboutDialog(this).exec();
-}
+public:
+
+    explicit AddDownloadDialog(QWidget * parent = 0);
+    ~AddDownloadDialog();
+
+private:
+
+    Ui::AddDownloadDialog * ui;
+};
+
+#endif // TL_ADDDOWNLOADDIALOG_H
