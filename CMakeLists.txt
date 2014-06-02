@@ -13,17 +13,21 @@ configure_file(src/config.h.in
     ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
 set(SRC
+    src/aboutdialog.cpp
     src/main.cpp
     src/mainwindow.cpp)
 
 qt5_wrap_cpp(MOC
+    src/aboutdialog.h
     src/mainwindow.h)
 
 qt5_wrap_ui(UI
+    ui/aboutdialog.ui
     ui/mainwindow.ui)
 
-add_executable(twistload WIN32
-    ${SRC} ${MOC} ${UI})
+qt5_add_resources(QRC resources.qrc)
+
+add_executable(twistload WIN32 ${SRC} ${MOC} ${UI} ${QRC})
 qt5_use_modules(twistload Widgets)
 
 install(TARGETS twistload
