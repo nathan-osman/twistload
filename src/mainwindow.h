@@ -34,6 +34,10 @@ public:
     explicit MainWindow(QWidget * parent = 0);
     ~MainWindow();
 
+private slots:
+
+        void showAboutDialog();
+
 private:
 
     Ui::MainWindow *ui;
