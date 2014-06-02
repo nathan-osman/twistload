@@ -16,39 +16,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TL_MAINWINDOW_H
-#define TL_MAINWINDOW_H
+#ifndef TL_DOWNLOADMODEL_H
+#define TL_DOWNLOADMODEL_H
 
-#include <QMainWindow>
+#include <QAbstractTableModel>
 
-#include "models/downloadmodel.h"
-
-namespace Ui {
-    class MainWindow;
-}
-
-class MainWindow : public QMainWindow
+class DownloadModel : public QAbstractTableModel
 {
     Q_OBJECT
 
 public:
 
-    explicit MainWindow(QWidget * parent = 0);
-    ~MainWindow();
+    explicit DownloadModel(QObject * parent = 0);
+    ~DownloadModel();
 
-private slots:
+    int rowCount(const QModelIndex & parent) const;
+    int columnCount(const QModelIndex & parent) const;
 
-    void showAboutDialog();
-    void showAddDownloadDialog();
-
-private:
-
-    void setupTable();
-    void setupToolbar();
-
-    Ui::MainWindow * ui;
-
-    DownloadModel model;
+    QVariant headerData(int section, Qt::Orientation, int role) const;
+    QVariant data(const QModelIndex & index, int role) const;
 };
 
-#endif // TL_MAINWINDOW_H
+#endif // TL_DOWNLOADMODEL_H

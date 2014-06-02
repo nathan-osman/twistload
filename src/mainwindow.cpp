@@ -16,7 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QSize>
+
 #include "dialogs/aboutdialog.h"
+#include "dialogs/adddownloaddialog.h"
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -24,6 +28,9 @@ MainWindow::MainWindow(QWidget * parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    setupTable();
+    setupToolbar();
 }
 
 MainWindow::~MainWindow()
@@ -34,4 +41,27 @@ MainWindow::~MainWindow()
 void MainWindow::showAboutDialog()
 {
     AboutDialog(this).exec();
+}
+
+void MainWindow::showAddDownloadDialog()
+{
+    AddDownloadDialog().exec();
+}
+
+void MainWindow::setupTable()
+{
+    ui->downloads->setModel(&model);
+    ui->downloads->setColumnWidth(0, 48);
+    ui->downloads->setColumnWidth(1, 350);
+    ui->downloads->horizontalHeader()->setStretchLastSection(true);
+}
+
+void MainWindow::setupToolbar()
+{
+    ui->toolBar->setIconSize(QSize(24, 24));
+
+    ui->toolBar->addAction(QIcon::fromTheme("list-add"),
+                           tr("Add Download"),
+                           this,
+                           SLOT(showAddDownloadDialog()));
 }
