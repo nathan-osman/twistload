@@ -48,7 +48,7 @@ private:
 
     Ui::MainWindow * ui;
 
-    DownloadModel model;
+    DownloadModel m_model;
 };
 
 #endif // TL_MAINWINDOW_H

@@ -21,6 +21,8 @@
 
 #include <QDialog>
 
+#include "../models/download.h"
+
 namespace Ui {
     class AddDownloadDialog;
 }
@@ -33,6 +35,8 @@ public:
 
     explicit AddDownloadDialog(QWidget * parent = 0);
     ~AddDownloadDialog();
+
+    DownloadPtr download();
 
 private:
 

@@ -16,30 +16,44 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <cmath>
+
 #include "download.h"
 
-Download::Download(QObject * parent)
-    : QObject(parent)
+Download::Download(QString url)
+    : m_url(url),
+      m_last_interval(0),
+      m_bytes_per_second(256000),
+      m_bytes_total(1000000),
+      m_bytes_received(126000)
 {
-    //...
 }
 
 Download::~Download()
 {
-    //...
 }
 
-int Download::percentage()
+QString Download::percentage()
 {
-    return 15;
+    if(m_bytes_total)
+        return QString("%1%").arg(int((double)m_bytes_received / (double)m_bytes_total * 100.0f));
+    else
+        return "-";
 }
 
 QString Download::url()
 {
-    return "http://example.org";
+    return m_url;
 }
 
 QString Download::speed()
 {
-    return "256 KB/s";
+    if(m_bytes_per_second < pow(10, 3))
+        return QString("%1 B/s").arg(m_bytes_per_second);
+    else if(m_bytes_per_second < pow(10, 6))
+        return QString("%1 KB/s").arg(m_bytes_per_second / pow(10, 3));
+    else if(m_bytes_per_second < pow(10, 9))
+        return QString("%1 MB/s").arg(m_bytes_per_second / pow(10, 6));
+    else
+        return QString("%1 GB/s").arg(m_bytes_per_second / pow(10, 9));
 }

@@ -21,7 +21,6 @@
 
 #include <QAbstractTableModel>
 #include <QList>
-#include <QSharedPointer>
 
 #include "download.h"
 
@@ -40,9 +39,11 @@ public:
     QVariant headerData(int section, Qt::Orientation, int role) const;
     QVariant data(const QModelIndex & index, int role) const;
 
+    void add(DownloadPtr download);
+
 private:
 
-    QList<QSharedPointer<Download> > downloads;
+    QList<DownloadPtr> m_downloads;
 };
 
 #endif // TL_DOWNLOADMODEL_H

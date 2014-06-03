@@ -45,12 +45,14 @@ void MainWindow::showAboutDialog()
 
 void MainWindow::showAddDownloadDialog()
 {
-    AddDownloadDialog().exec();
+    AddDownloadDialog dialog;
+    if(dialog.exec())
+        m_model.add(dialog.download());
 }
 
 void MainWindow::setupTable()
 {
-    ui->downloads->setModel(&model);
+    ui->downloads->setModel(&m_model);
     ui->downloads->setColumnWidth(0, 48);
     ui->downloads->setColumnWidth(1, 350);
 }

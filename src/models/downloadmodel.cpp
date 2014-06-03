@@ -16,9 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QPair>
-#include <QSize>
-
 #include "downloadmodel.h"
 
 const char * columns[][2] = {
@@ -30,17 +27,15 @@ const char * columns[][2] = {
 DownloadModel::DownloadModel(QObject * parent)
     : QAbstractTableModel(parent)
 {
-    downloads.append(QSharedPointer<Download>(new Download));
 }
 
 DownloadModel::~DownloadModel()
 {
-    //...
 }
 
 int DownloadModel::rowCount(const QModelIndex & parent) const
 {
-    return parent.isValid() ? 0 : downloads.count();
+    return parent.isValid() ? 0 : m_downloads.count();
 }
 
 int DownloadModel::columnCount(const QModelIndex & parent) const
@@ -59,7 +54,14 @@ QVariant DownloadModel::headerData(int section, Qt::Orientation, int role) const
 QVariant DownloadModel::data(const QModelIndex & index, int role) const
 {
     if(role == Qt::DisplayRole)
-        return downloads[index.row()]->property(columns[index.column()][0]);
+        return m_downloads[index.row()]->property(columns[index.column()][0]);
 
     return QVariant();
+}
+
+void DownloadModel::add(DownloadPtr download)
+{
+    beginInsertRows(QModelIndex(), m_downloads.count(), m_downloads.count());
+    m_downloads.append(download);
+    endInsertRows();
 }

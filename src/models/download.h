@@ -20,23 +20,36 @@
 #define TL_DOWNLOAD_H
 
 #include <QObject>
+#include <QSharedPointer>
 
 class Download : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(int percentage READ percentage)
-    Q_PROPERTY(QString url    READ url)
-    Q_PROPERTY(QString speed  READ speed)
+    Q_PROPERTY(QString percentage READ percentage)
+    Q_PROPERTY(QString url        READ url)
+    Q_PROPERTY(QString speed      READ speed)
 
 public:
 
-    explicit Download(QObject * parent = 0);
+    Download(QString url);
     ~Download();
 
-    int percentage();
+    QString percentage();
     QString url();
     QString speed();
+
+private:
+
+    QString m_url;
+
+    qint64 m_last_interval;
+    qint64 m_bytes_per_second;
+
+    qint64 m_bytes_total;
+    qint64 m_bytes_received;
 };
+
+typedef QSharedPointer<Download> DownloadPtr;
 
 #endif // TL_DOWNLOAD_H

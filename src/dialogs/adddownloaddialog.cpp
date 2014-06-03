@@ -29,3 +29,8 @@ AddDownloadDialog::~AddDownloadDialog()
 {
     delete ui;
 }
+
+DownloadPtr AddDownloadDialog::download()
+{
+    return DownloadPtr(new Download(ui->url->text()));
+}
