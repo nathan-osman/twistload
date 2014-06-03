@@ -16,33 +16,30 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TL_DOWNLOADMODEL_H
-#define TL_DOWNLOADMODEL_H
-
-#include <QAbstractTableModel>
-#include <QList>
-#include <QSharedPointer>
-
 #include "download.h"
 
-class DownloadModel : public QAbstractTableModel
+Download::Download(QObject * parent)
+    : QObject(parent)
 {
-    Q_OBJECT
+    //...
+}
 
-public:
+Download::~Download()
+{
+    //...
+}
 
-    explicit DownloadModel(QObject * parent = 0);
-    ~DownloadModel();
+int Download::percentage()
+{
+    return 15;
+}
 
-    int rowCount(const QModelIndex & parent) const;
-    int columnCount(const QModelIndex & parent) const;
+QString Download::url()
+{
+    return "http://example.org";
+}
 
-    QVariant headerData(int section, Qt::Orientation, int role) const;
-    QVariant data(const QModelIndex & index, int role) const;
-
-private:
-
-    QList<QSharedPointer<Download> > downloads;
-};
-
-#endif // TL_DOWNLOADMODEL_H
+QString Download::speed()
+{
+    return "256 KB/s";
+}

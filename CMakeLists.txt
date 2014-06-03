@@ -15,6 +15,7 @@ configure_file(src/config.h.in
 set(SRC
     src/dialogs/aboutdialog.cpp
     src/dialogs/adddownloaddialog.cpp
+    src/models/download.cpp
     src/models/downloadmodel.cpp
     src/main.cpp
     src/mainwindow.cpp)
@@ -22,6 +23,7 @@ set(SRC
 qt5_wrap_cpp(MOC
     src/dialogs/aboutdialog.h
     src/dialogs/adddownloaddialog.h
+    src/models/download.h
     src/models/downloadmodel.h
     src/mainwindow.h)
 

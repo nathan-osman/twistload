@@ -53,7 +53,6 @@ void MainWindow::setupTable()
     ui->downloads->setModel(&model);
     ui->downloads->setColumnWidth(0, 48);
     ui->downloads->setColumnWidth(1, 350);
-    ui->downloads->horizontalHeader()->setStretchLastSection(true);
 }
 
 void MainWindow::setupToolbar()

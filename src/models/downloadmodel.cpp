@@ -16,14 +16,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QPair>
 #include <QSize>
 
 #include "downloadmodel.h"
 
+const char * columns[][2] = {
+    {"percentage", ""},
+    {"url",        "URL"},
+    {"speed",      "Speed"}
+};
+
 DownloadModel::DownloadModel(QObject * parent)
     : QAbstractTableModel(parent)
 {
-    //...
+    downloads.append(QSharedPointer<Download>(new Download));
 }
 
 DownloadModel::~DownloadModel()
@@ -33,27 +40,26 @@ DownloadModel::~DownloadModel()
 
 int DownloadModel::rowCount(const QModelIndex & parent) const
 {
-    return 0;
+    return parent.isValid() ? 0 : downloads.count();
 }
 
 int DownloadModel::columnCount(const QModelIndex & parent) const
 {
-    return 3;
+    return parent.isValid() ? 0 : sizeof(columns) / sizeof(QString) / 2;
 }
 
 QVariant DownloadModel::headerData(int section, Qt::Orientation, int role) const
 {
     if(role == Qt::DisplayRole)
-        switch(section)
-        {
-            case 1: return tr("URL");
-            case 2: return tr("Speed");
-        }
+        return columns[section][1];
 
     return QVariant();
 }
 
 QVariant DownloadModel::data(const QModelIndex & index, int role) const
 {
+    if(role == Qt::DisplayRole)
+        return downloads[index.row()]->property(columns[index.column()][0]);
+
     return QVariant();
 }
