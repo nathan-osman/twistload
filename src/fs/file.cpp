@@ -27,6 +27,11 @@
 #include "allocationtask.h"
 #include "file.h"
 
+File::File()
+    : mTask(nullptr)
+{
+}
+
 File::File(const QString &filename)
     : mTask(nullptr),
       mFile(filename)
@@ -41,6 +46,16 @@ File::~File()
     }
 }
 
+QString File::filename() const
+{
+    return mFile.fileName();
+}
+
+void File::setFilename(const QString &filename)
+{
+    mFile.setFileName(filename);
+}
+
 void File::open(qint64 size)
 {
     if (size) {
@@ -50,8 +65,8 @@ void File::open(qint64 size)
         mTask->moveToThread(&mThread);
 
         // Ensure the task and thread are destroyed when complete
+        connect(mTask, &AllocationTask::error, this, &File::error);
         connect(mTask, &AllocationTask::progress, this, &File::allocationProgress);
-        connect(mTask, &AllocationTask::error, this, &File::allocationError);
         connect(mTask, &AllocationTask::succeeded, this, &File::onSucceeded);
         connect(mTask, &AllocationTask::finished, this, [=]() {
             mTask->deleteLater();

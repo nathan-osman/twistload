@@ -46,6 +46,13 @@ public:
 
     /**
      * @brief Create a new file
+     *
+     * The filename must be set with setFilename().
+     */
+    File();
+
+    /**
+     * @brief Create a new file
      */
     explicit File(const QString &filename);
 
@@ -56,6 +63,16 @@ public:
      * is successfully interrupted.
      */
     virtual ~File();
+
+    /**
+     * @brief Retrieve the filename
+     */
+    QString filename() const;
+
+    /**
+     * @brief Set the filename
+     */
+    void setFilename(const QString &filename);
 
     /**
      * @brief Open the file for writing
@@ -79,15 +96,15 @@ public:
 Q_SIGNALS:
 
     /**
+     * @brief Indicate an error occurred during allocation or writing
+     */
+    void error(const QString &message);
+
+    /**
      * @brief Indicate allocation progress
      * @param value integer between 0 and 100 inclusive
      */
     void allocationProgress(int value);
-
-    /**
-     * @brief Indicate an error occurred during allocation or writing
-     */
-    void allocationError(const QString &message);
 
     /**
      * @brief Indicate that the file has successfully been allocated

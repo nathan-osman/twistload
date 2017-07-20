@@ -3,6 +3,8 @@ configure_file(config.h.in "${CMAKE_CURRENT_BINARY_DIR}/config.h")
 set(SRC
     download/download.cpp
     download/fragment.cpp
+    fs/allocationtask.cpp
+    fs/file.cpp
     ui/mainwindow.cpp
     main.cpp
 )
