@@ -26,10 +26,10 @@
 #define FRAGMENT_H
 
 #include <QNetworkReply>
+#include <QNetworkRequest>
 #include <QObject>
 
 class QNetworkAccessManager;
-class QUrl;
 
 /**
  * @brief Individual download fragment
@@ -44,14 +44,19 @@ class Fragment : public QObject
 
 public:
 
-    Fragment(QNetworkAccessManager *manager, const QUrl &url,
+    Fragment(QNetworkAccessManager *manager, const QString &url,
              qint64 start, qint64 end);
+    virtual ~Fragment();
 
 Q_SIGNALS:
 
     void dataReceived(const QByteArray &data, qint64 offset);
     void error(const QString &message);
     void finished();
+
+public Q_SLOTS:
+
+    void start();
 
 private Q_SLOTS:
 
@@ -60,8 +65,12 @@ private Q_SLOTS:
 
 private:
 
+    QNetworkAccessManager *mManager;
+    QNetworkRequest mRequest;
     QNetworkReply *mReply;
+
     qint64 mOffset;
+    qint64 mEnd;
 };
 
 #endif // FRAGMENT_H

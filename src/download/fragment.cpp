@@ -25,17 +25,32 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
+#include <QUrl>
 
 #include "fragment.h"
 
-Fragment::Fragment(QNetworkAccessManager *manager, const QUrl &url,
+Fragment::Fragment(QNetworkAccessManager *manager, const QString &url,
                    qint64 start, qint64 end)
-    : mOffset(start)
+    : mManager(manager),
+      mRequest(QUrl(url)),
+      mReply(nullptr),
+      mOffset(start),
+      mEnd(end)
 {
-    QNetworkRequest request(url);
-    request.setRawHeader("Range", QString("bytes=%1-%2").arg(start).arg(end).toUtf8());
-    mReply = manager->get(request);
+}
 
+Fragment::~Fragment()
+{
+    if (mReply) {
+        mReply->deleteLater();
+    }
+}
+
+void Fragment::start()
+{
+    QString range = QString("bytes=%1-%2").arg(mOffset).arg(mEnd);
+    mRequest.setRawHeader("Range", range.toUtf8());
+    mReply = mManager->get(mRequest);
     connect(mReply, &QNetworkReply::readyRead, this, &Fragment::onReadyRead);
     connect(mReply, static_cast<void(QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error), this, &Fragment::onError);
     connect(mReply, &QNetworkReply::finished, this, &Fragment::finished);
