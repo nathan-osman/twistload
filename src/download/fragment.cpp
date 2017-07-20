@@ -22,16 +22,33 @@
  * IN THE SOFTWARE.
  */
 
-#ifndef CONFIG_H
-#define CONFIG_H
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QNetworkRequest>
 
-#define PROJECT_NAME   "@PROJECT_NAME@"
-#define PROJECT_AUTHOR "@PROJECT_AUTHOR@"
+#include "fragment.h"
 
-#define PROJECT_VERSION_MAJOR @PROJECT_VERSION_MAJOR@
-#define PROJECT_VERSION_MINOR @PROJECT_VERSION_MINOR@
-#define PROJECT_VERSION_PATCH @PROJECT_VERSION_PATCH@
-#define PROJECT_VERSION       "@PROJECT_VERSION@"
+Fragment::Fragment(QNetworkAccessManager *manager, const QUrl &url,
+                   qint64 start, qint64 end)
+    : mOffset(start)
+{
+    QNetworkRequest request(url);
+    request.setRawHeader("Range", QString("bytes=%1-%2").arg(start).arg(end).toUtf8());
+    mReply = manager->get(request);
 
-#endif // CONFIG_H
+    connect(mReply, &QNetworkReply::readyRead, this, &Fragment::onReadyRead);
+    connect(mReply, static_cast<void(QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error), this, &Fragment::onError);
+    connect(mReply, &QNetworkReply::finished, this, &Fragment::finished);
+}
 
+void Fragment::onReadyRead()
+{
+    QByteArray data = mReply->readAll();
+    emit dataReceived(data, mOffset);
+    mOffset += data.length();
+}
+
+void Fragment::onError(QNetworkReply::NetworkError code)
+{
+    emit error(mReply->errorString());
+}

@@ -22,16 +22,46 @@
  * IN THE SOFTWARE.
  */
 
-#ifndef CONFIG_H
-#define CONFIG_H
+#ifndef FRAGMENT_H
+#define FRAGMENT_H
 
-#define PROJECT_NAME   "@PROJECT_NAME@"
-#define PROJECT_AUTHOR "@PROJECT_AUTHOR@"
+#include <QNetworkReply>
+#include <QObject>
 
-#define PROJECT_VERSION_MAJOR @PROJECT_VERSION_MAJOR@
-#define PROJECT_VERSION_MINOR @PROJECT_VERSION_MINOR@
-#define PROJECT_VERSION_PATCH @PROJECT_VERSION_PATCH@
-#define PROJECT_VERSION       "@PROJECT_VERSION@"
+class QNetworkAccessManager;
+class QUrl;
 
-#endif // CONFIG_H
+/**
+ * @brief Individual download fragment
+ *
+ * Downloads consist of one or more individual fragments which download a
+ * specific range of the file. As data is received, the dataReceived() signal
+ * is emitted.
+ */
+class Fragment : public QObject
+{
+    Q_OBJECT
 
+public:
+
+    Fragment(QNetworkAccessManager *manager, const QUrl &url,
+             qint64 start, qint64 end);
+
+Q_SIGNALS:
+
+    void dataReceived(const QByteArray &data, qint64 offset);
+    void error(const QString &message);
+    void finished();
+
+private Q_SLOTS:
+
+    void onReadyRead();
+    void onError(QNetworkReply::NetworkError code);
+
+private:
+
+    QNetworkReply *mReply;
+    qint64 mOffset;
+};
+
+#endif // FRAGMENT_H
