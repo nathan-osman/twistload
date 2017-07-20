@@ -77,16 +77,17 @@ void File::open(qint64 size)
         // Start the thread and invoke the slot
         mThread.start();
         QMetaObject::invokeMethod(mTask, "run", Qt::QueuedConnection);
+
+    } else {
+        emit allocationSucceeded();
     }
 }
 
-bool File::write(const QByteArray &data, qint64 offset)
+void File::write(const QByteArray &data, qint64 offset)
 {
     if (!mFile.seek(offset) || mFile.write(data) == -1) {
         emit error(mFile.errorString());
-        return false;
     }
-    return true;
 }
 
 void File::close()

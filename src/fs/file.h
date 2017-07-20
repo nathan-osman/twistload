@@ -86,7 +86,7 @@ public:
     /**
      * @brief Write data to the file at the specified location
      */
-    bool write(const QByteArray &data, qint64 offset);
+    void write(const QByteArray &data, qint64 offset);
 
     /**
      * @brief Close the file

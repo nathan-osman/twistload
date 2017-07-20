@@ -54,12 +54,19 @@ void AllocationTask::run()
         return;
     }
 
-    // Determine how much data remains to be written and create a block of
-    // zero-initialized memory to write to the file
+    // Determine how much data remains to be written - and if the file is too
+    // large, truncate it
     qint64 remaining = mSize - file.size();
-    const char block[BlockSize] = {};
+    if (remaining < 0) {
+        if (!file.resize(mFilename, mSize)) {
+            emit error(file.errorString());
+            emit finished();
+            return;
+        }
+    }
 
     // Write blocks to the file until it reaches the desired size
+    const char block[BlockSize] = {};
     while (remaining > 0) {
 
         // Lock the mutex and check if the operation should be aborted

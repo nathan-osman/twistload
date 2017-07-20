@@ -31,7 +31,9 @@
 /**
  * @brief Task for allocating space in a file
  *
- * This task is designed to be run in a separate thread.
+ * This task is designed to be run in a separate thread. Although QFile
+ * provides a resize() method, it isn't asynchronous, hence the need for this
+ * class.
  */
 class AllocationTask : public QObject
 {
