@@ -15,11 +15,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
-#ifndef TL_CONFIG_H
-#define TL_CONFIG_H
 
-#define TWISTLOAD_VERSION "@VERSION@"
+#ifndef CONFIG_H
+#define CONFIG_H
 
-#endif // TL_CONFIG_H
+#define PROJECT_NAME   @PROJECT_NAME@
+#define PROJECT_AUTHOR @PROJECT_AUTHOR@
+
+#define PROJECT_VERSION_MAJOR @PROJECT_VERSION_MAJOR@
+#define PROJECT_VERSION_MINOR @PROJECT_VERSION_MINOR@
+#define PROJECT_VERSION_PATCH @PROJECT_VERSION_PATCH@
+#define PROJECT_VERSION       "@PROJECT_VERSION@"
+
+#endif // CONFIG_H
 

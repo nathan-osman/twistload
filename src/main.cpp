@@ -19,17 +19,13 @@
 #include <QApplication>
 
 #include "config.h"
-#include "mainwindow.h"
 
 int main(int argc, char * argv[])
 {
     QApplication a(argc, argv);
-    QApplication::setApplicationName("TwistLoad");
-    QApplication::setOrganizationName("Nathan Osman");
-    QApplication::setApplicationVersion(TWISTLOAD_VERSION);
-
-    MainWindow w;
-    w.show();
+    QApplication::setApplicationName(PROJECT_NAME);
+    QApplication::setOrganizationName(PROJECT_AUTHOR);
+    QApplication::setApplicationVersion(PROJECT_VERSION);
 
     return a.exec();
 }

@@ -1,41 +1,17 @@
-cmake_minimum_required(VERSION 2.8.9)
+cmake_minimum_required(VERSION 3.2.0)
 project(twistload)
 
-find_package(Qt5Widgets)
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(PROJECT_NAME   "TwistLoad")
+set(PROJECT_AUTHOR "Nathan Osman")
 
-set(VERSION_MAJOR 0)
-set(VERSION_MINOR 1)
-set(VERSION_PATCH 0)
-set(VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
+set(PROJECT_VERSION_MAJOR 0)
+set(PROJECT_VERSION_MINOR 1)
+set(PROJECT_VERSION_PATCH 0)
+set(PROJECT_VERSION ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH})
 
-configure_file(src/config.h.in
-    ${CMAKE_CURRENT_BINARY_DIR}/config.h)
+find_package(Qt5Network 5.4 REQUIRED)
+find_package(Qt5Widgets 5.4 REQUIRED)
 
-set(SRC
-    src/dialogs/aboutdialog.cpp
-    src/dialogs/adddownloaddialog.cpp
-    src/models/download.cpp
-    src/models/downloadmodel.cpp
-    src/main.cpp
-    src/mainwindow.cpp)
+set(CMAKE_AUTOMOC ON)
 
-qt5_wrap_cpp(MOC
-    src/dialogs/aboutdialog.h
-    src/dialogs/adddownloaddialog.h
-    src/models/download.h
-    src/models/downloadmodel.h
-    src/mainwindow.h)
-
-qt5_wrap_ui(UI
-    ui/aboutdialog.ui
-    ui/adddownloaddialog.ui
-    ui/mainwindow.ui)
-
-qt5_add_resources(QRC resources.qrc)
-
-add_executable(twistload WIN32 ${SRC} ${MOC} ${UI} ${QRC})
-qt5_use_modules(twistload Widgets)
-
-install(TARGETS twistload
-    RUNTIME DESTINATION bin)
+add_subdirectory(src)
