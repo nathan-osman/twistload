@@ -48,15 +48,15 @@ public:
              qint64 start, qint64 end);
     virtual ~Fragment();
 
+    void start();
+    void stop();
+
 Q_SIGNALS:
 
     void dataReceived(const QByteArray &data, qint64 offset);
     void error(const QString &message);
+    void succeeded();
     void finished();
-
-public Q_SLOTS:
-
-    void start();
 
 private Q_SLOTS:
 

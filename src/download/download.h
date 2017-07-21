@@ -63,7 +63,9 @@ public:
         /// File is being downloaded
         Downloading,
         /// An error has occurred
-        Failed
+        Failed,
+        /// The download completed
+        Succeeded
     };
 
     /**
@@ -145,13 +147,15 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 
-    void onFinished();
+    void onProbeFinished();
 
     void onError(const QString &message);
     void onAllocationProgress(int value);
     void onAllocationSucceeded();
 
     void onDataReceived(const QByteArray &data, qint64 offset);
+    void onFragmentError(const QString &message);
+    void onFragmentFinished();
 
 private:
 

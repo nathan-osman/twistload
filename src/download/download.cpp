@@ -34,6 +34,8 @@
 #include "download.h"
 #include "fragment.h"
 
+const int FragmentCount = 5;
+
 Download::Download(QNetworkAccessManager *manager, const QString &url, const QString &filename)
     : mManager(manager),
       mReply(nullptr),
@@ -120,7 +122,7 @@ void Download::start()
     }
 }
 
-void Download::onFinished()
+void Download::onProbeFinished()
 {
     // If the probe request succeeded, continue with allocation
     if (mReply->error() == QNetworkReply::NoError) {
@@ -152,6 +154,24 @@ void Download::onDataReceived(const QByteArray &data, qint64 offset)
     mFile.write(data, offset);
 }
 
+void Download::onFragmentError(const QString &message)
+{
+    // TODO: stop the download
+}
+
+void Download::onFragmentFinished()
+{
+    Fragment *fragment = qobject_cast<Fragment*>(sender());
+    mFragments.removeAll(fragment);
+    delete fragment;
+
+    // If no fragments remain, the download is complete
+    if (!mFragments.count()) {
+        mState = Succeeded;
+        emit stateChanged();
+    }
+}
+
 void Download::init()
 {
     connect(&mFile, &File::error, this, &Download::onError);
@@ -165,7 +185,7 @@ void Download::probe()
     emit stateChanged();
 
     mReply = mManager->head(QNetworkRequest(QUrl(mUrl)));
-    connect(mReply, &QNetworkReply::finished, this, &Download::onFinished);
+    connect(mReply, &QNetworkReply::finished, this, &Download::onProbeFinished);
 }
 
 void Download::alloc()
@@ -181,9 +201,19 @@ void Download::download()
     mState = Downloading;
     emit stateChanged();
 
-    // TODO: set up downloads
+    // Create the fragments for downloading the file
     if (!mFragments.count()) {
-        //...
+        if (mSize) {
+            qint64 fragmentSize = mSize / FragmentCount;
+            for (int i = 0; i < FragmentCount - 1; ++i) {
+                qint64 start = i * fragmentSize;
+                qint64 end = start + fragmentSize - 1;
+                newFragment(start, end)->start();
+            }
+            newFragment((FragmentCount - 1) * fragmentSize, mSize - 1);
+        } else {
+            newFragment(0, 0)->start();
+        }
     }
 }
 
@@ -200,6 +230,8 @@ Fragment *Download::newFragment(qint64 start, qint64 end)
 {
     Fragment *fragment = new Fragment(mManager, mUrl, start, end);
     connect(fragment, &Fragment::dataReceived, this, &Download::onDataReceived);
+    connect(fragment, &Fragment::error, this, &Download::onFragmentError);
+    connect(fragment, &Fragment::finished, this, &Download::onFragmentFinished);
     mFragments.append(fragment);
     return fragment;
 }

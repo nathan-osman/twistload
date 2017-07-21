@@ -23,8 +23,6 @@
  */
 
 #include <QNetworkAccessManager>
-#include <QNetworkReply>
-#include <QNetworkRequest>
 #include <QUrl>
 
 #include "fragment.h"
@@ -48,12 +46,21 @@ Fragment::~Fragment()
 
 void Fragment::start()
 {
-    QString range = QString("bytes=%1-%2").arg(mOffset).arg(mEnd);
-    mRequest.setRawHeader("Range", range.toUtf8());
+    // If a valid end was specified, set the request's range
+    if (mEnd) {
+        QString range = QString("bytes=%1-%2").arg(mOffset).arg(mEnd);
+        mRequest.setRawHeader("Range", range.toUtf8());
+    }
+
     mReply = mManager->get(mRequest);
     connect(mReply, &QNetworkReply::readyRead, this, &Fragment::onReadyRead);
     connect(mReply, static_cast<void(QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error), this, &Fragment::onError);
     connect(mReply, &QNetworkReply::finished, this, &Fragment::finished);
+}
+
+void Fragment::stop()
+{
+    mReply->close();
 }
 
 void Fragment::onReadyRead()
